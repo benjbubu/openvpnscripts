@@ -1,28 +1,28 @@
-for install enter commande in root (sudo su root)
+Script forked from NicoLargo's Openvpnscripts.
 
-script compatibility for debian 6  ubuntu 12.04, 12.10 and centos 6 (not test for fedora)
+This script allows to create a new user for OpenVPN
 
-pour installer entrez ces commande en root (sudo su root)
 
-script compatible sur debian 6 ubuntu 12.04 , 12.10 et centos 6 (non tester sur fedora)
+This Fork adds a choice to send the files to the user by mail or put in a web folder (/var/www/).
 
-install packet git and dos2unix
+Don't forget to change the folder from openvpn (/etc/openvpn/confuser) and apache (for downloading the user's files).
 
-installer les packet git et dos2unix
+I using mutt to send the files by mail. The script will check and/or install it if needed.
 
-apt-get -y install git dos2unix or (ou) yum -y install git dos2unix
+(but you can change it:))
 
-cd /tmp && git clone git://github.com/nicolargo/openvpnscripts.git && dos2unix openvpnscripts/install.sh && chmod +x openvpnscripts/install.sh  && openvpnscripts/install.sh
 
-après installation pour crée un client executer ovcreateclient non du client
+----------------------------------------------------
 
-after install for create client execute ovcreateclient name of client
+Fork du script de NicoLargo
 
-ex :
-eg :
+Ce script permet de créer un nouvel user pour OpenVPN
 
-ovcreateclient myclient
+Il ajoute un choix permettant d'envoyer les fichiers de configuration directement par mail ou les 
+déplacer dans un dossier d'apache pour un download direct par l'user.
 
-vous pouvez ensuite récupérer l'archive zip dans le dossier /etc/openvpn/clientconf/nomduclient
+N'oubliez pas de changer les répertoires d'openvpn et d'apache et aussi le port dans le script.
 
-you can then retrieve the zip file in the /etc/openvpn/clientconf/nameofclient
+J'utilise mutt pour envoyer le fichier. Le script va vérifier et installer si besoin
+
+(mais vous pouvez modifier le programme utilisé bien sur :))
