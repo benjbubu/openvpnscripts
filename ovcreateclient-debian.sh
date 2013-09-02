@@ -8,22 +8,27 @@
 # - Fran�ois ANTON (add choice for certificate password)
 # - Kimpe Andy (add conpatibility for windows vista and windows 7)
 #
+# Forked by : 
+# - Benjbubu (aka Benjamin Bujon) (add choice to send the files to the user)
 # GPLv3
 #
 # Syntaxe: # sudo ./ovcreateclient.sh <nomduclient>
 #
 VERSION="0.3"
-port=$(cat /etc/openvpnport)
-proto=$(cat /etc/openvpnproto)
-# verifier si sudo et installer
+# verifier si sudo est installe
 if [ ! -e "/usr/bin/sudo" ]; then
 # si sudo n'est pas installer ont l'install
 apt-get -y install sudo
 fi
-# verifier si zip et installer
+# verifier si zip est installe
 if [ ! -e "/usr/bin/zip" ]; then
-# si zip n'est pas installer ont l'install
+# si zip n'est pas installe on l'install
 apt-get -y install zip
+fi
+#Verif de l'install de mutt
+if [ ! -e "/usr/bin/mutt" ]; then
+# si zip n'est pas installe on l'install
+apt-get -y install mutt
 fi
 # Test que le script est lance en root
 if [ $EUID -ne 0 ]; then
@@ -73,8 +78,8 @@ cat >> /etc/openvpn/clientconf/$1/client.conf << EOF
 # Client
 client
 dev tun
-proto $proto
-remote `wget -qO- ifconfig.me/ip` $port
+proto tcp-client
+remote `wget -qO- ifconfig.me/ip` 443
 resolv-retry infinite
 cipher AES-256-CBC
 # Cles
@@ -108,3 +113,30 @@ sudo zip $1.zip *.*
 echo "Creation du client OpenVPN $1 termine"
 echo "/etc/openvpn/clientconf/$1/$1.zip" 
 echo "---"
+
+echo "Voulez vous deplacer le fichier zip dans le répertoire Apache ?"
+echo "1) Oui, le deplacer"
+echo "2) L'envoyer sur un email"
+echo "3) non le laisser dans le dossier actuel"
+read choice
+
+case $choice in 
+	1)
+		echo "Deplacement en cours"
+		mkdir /var/www/vpnuserfiles/$1
+		mv /etc/openvpn/confuser/$1/$1.zip /var/www/vpnuserfiles/$1/
+		echo "Job Complete Master"
+		;;
+	2)
+		echo -n "Sur quel email souhaitez vous envoyer les cles?"
+		read email
+		echo "Tous les fichiers sont contenus dans le fichier .zip en piece jointe." | mutt -s "Cles pour VPN" -a /etc/openvpn/clientconf/$1/$1.zip -- $email
+		echo "Job Complete Master";;
+	3)
+		echo "Le fichier zip reste a son emplacement actuel"
+		echo "/etc/openvpn/clientconf/$1/$1.zip"
+		;;
+	*)
+		echo "Mauvaise touche"
+		;;
+esac
