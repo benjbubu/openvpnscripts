@@ -7,7 +7,7 @@ This Fork adds a choice to send the files to the user by mail or put in a web fo
 
 Don't forget to change the folder from openvpn (/etc/openvpn/confuser) and apache (for downloading the user's files).
 
-I using mutt to send the files by mail. The script will check and/or install it if needed.
+I use mutt to send the files by mail. The script will check and/or install it if needed.
 
 (but you can change it:))
 
